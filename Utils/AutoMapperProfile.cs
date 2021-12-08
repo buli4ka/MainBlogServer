@@ -45,6 +45,14 @@ namespace Server.Utils
                     opt => opt.MapFrom(post =>
                         post.PostLikes.Count));
 
+            CreateMap<CreateUpdatePost, Post>()
+                .ForAllMembers(x => x.Condition(
+                    (src, dest, prop) =>
+                    {
+                        if (prop == null) return false;
+                        return prop.GetType() != typeof(string) || !string.IsNullOrEmpty((string) prop);
+                    }
+                ));
             
             CreateMap<User, AuthorPreview>()
                 .ForMember("IconUrl",
@@ -82,6 +90,8 @@ namespace Server.Utils
                         return prop.GetType() != typeof(string) || !string.IsNullOrEmpty((string) prop);
                     }
                 ));
+            
+           
         }
     }
 }

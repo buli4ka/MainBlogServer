@@ -27,8 +27,7 @@ namespace Server.ViewModels.UserViewModels
         public string Username { get; set; }
         
         public string IconUrl { get; set; }
-        
-        
+
     }
 
     

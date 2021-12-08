@@ -12,13 +12,11 @@ namespace Server.Services.PostServices
         
         Task<PostView> GetPostById(Guid postId);
         
-        Task<List<PostView>> GetAllByUserId(Guid userId);
+        Task<List<PostPreview>> GetAllByUserId(Guid userId);
         
-        Task<List<PostView>> GetAllBySubscribed(Guid userId);
+        Task Create(CreateUpdatePost model);
 
-        Task<PostView> Create(CreateUpdatePost model);
-
-        Task<PostView> Update(CreateUpdatePost model);
+        Task Update(CreateUpdatePost model);
         
         Task Delete(Guid postId);
 

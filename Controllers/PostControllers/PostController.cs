@@ -1,11 +1,14 @@
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Server.Services.PostServices;
+using Server.ViewModels.PostViewModels;
 
 namespace Server.Controllers.PostControllers
 {
+    [ControllerAttributes.Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class PostController : ControllerBase
@@ -17,11 +20,40 @@ namespace Server.Controllers.PostControllers
             _postService = postService;
         }
 
+        [AllowAnonymous]
         [HttpGet("getById/{postId:guid}")]
         public async Task<IActionResult> Get(Guid postId)
         {
-            var post = await _postService.GetPostById(postId);
-            return Ok(post);
+            return Ok(await _postService.GetPostById(postId));
         }
+
+        [AllowAnonymous]
+        [HttpGet("GetAllByAuthorId/{authorId:guid}")]
+        public async Task<IActionResult> GetAllByAuthorId(Guid authorId)
+        {
+            return Ok(await _postService.GetAllByUserId(authorId));
+        }
+
+        [HttpPost("CreatePost")]
+        public async Task<IActionResult> CreatePost(CreateUpdatePost post)
+        {
+            await _postService.Create(post);
+            return Ok("Post Created");
+        }
+        
+        [HttpPut("UpdatePost")]
+        public async Task<IActionResult> UpdatePost(CreateUpdatePost post)
+        {
+            await _postService.Update(post);
+            return Ok("Post Updated");
+        }
+        
+        [HttpDelete("DeletePost/{postId:guid}")]
+        public async Task<IActionResult> DeletePost(Guid postId)
+        {
+            await _postService.Delete(postId);
+            return NoContent();
+        }
+        
     }
 }

@@ -6,8 +6,10 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Server.DatabaseConfig;
+using Server.Exceptions;
 using Server.Models.PostModels;
 using Server.Utils;
+using Server.Utils.PostValidation;
 using Server.ViewModels.PostViewModels;
 using Server.ViewModels.UserViewModels;
 
@@ -28,7 +30,7 @@ namespace Server.Services.PostServices
 
         public async Task<List<Post>> GetAll()
         {
-            return await _context.Set<Post>().ToListAsync();
+            return await _context.Posts.ToListAsync();
         }
 
         public async Task<PostView> GetPostById(Guid postId)
@@ -40,6 +42,7 @@ namespace Server.Services.PostServices
                 .Include(post => post.PostComments)
                 .Include(post => post.PostLikes)
                 .Include(post => post.PostImages)
+                .AsSplitQuery()
                 .FirstOrDefaultAsync();
 
             if (post == null)
@@ -50,29 +53,73 @@ namespace Server.Services.PostServices
             return _mapper.Map<PostView>(post);
         }
 
-        public async Task<List<PostView>> GetAllByUserId(Guid userId)
+        public async Task<List<PostPreview>> GetAllByUserId(Guid userId)
         {
-            throw new NotImplementedException();
+            var user = await _context.Users
+                .Where(user => user.Id == userId)
+                .Include(user => user.Posts)
+                .ThenInclude(post => post.PostComments)
+                .Include(user => user.Posts)
+                .ThenInclude(post => post.PostLikes)
+                .Include(user => user.Posts)
+                .ThenInclude(post => post.PostImages)
+                .AsSplitQuery()
+                .FirstOrDefaultAsync();
+
+            if (user == null)
+            {
+                throw new KeyNotFoundException("User not found");
+            }
+
+            return user.Posts.Select(post => _mapper.Map<PostPreview>(post)).ToList();
         }
 
-        public async Task<List<PostView>> GetAllBySubscribed(Guid userId)
+
+        public async Task Create(CreateUpdatePost model)
         {
-            throw new NotImplementedException();
+            var post = _mapper.Map<Post>(model);
+
+            if (!CheckPost.isPostValid(post))
+                throw new AppException("Invalid post Data");
+            post.CreatedAt = DateTime.Now;
+
+            _context.Add(post);
+            await _context.SaveChangesAsync();
+            
+          
+
         }
 
-        public async Task<PostView> Create(CreateUpdatePost model)
+        public async Task Update(CreateUpdatePost model)
         {
-            throw new NotImplementedException();
-        }
+            var post = await _context.Posts.FindAsync(model.Id);
 
-        public async Task<PostView> Update(CreateUpdatePost model)
-        {
-            throw new NotImplementedException();
+            if (post == null)
+            {
+                throw new KeyNotFoundException("Post not found");
+            }
+
+            _mapper.Map(model, post );
+
+            if (!CheckPost.isPostValid(post))
+                throw new AppException("Invalid post Data");
+
+            post.UpdatedAt = DateTime.Now;
+
+            _context.Update(post);
+            await _context.SaveChangesAsync();
+            
         }
 
         public async Task Delete(Guid postId)
         {
-            throw new NotImplementedException();
+            var post = await _context.Posts.FindAsync(postId);
+
+            if (post == null)
+                throw new KeyNotFoundException("Post not found");
+
+            _context.Remove(post);
+            await _context.SaveChangesAsync();
         }
     }
 }

@@ -167,7 +167,7 @@ namespace Server.Services.UserServices
             var user = await _context.Users.FindAsync(id);
 
             if (user == null)
-                throw new Exception("Internal server error - user not found");
+                throw new KeyNotFoundException("Internal server error - user not found");
 
             if (model.Username != user.Username && _context.Users.Any(x => x.Username == model.Username))
                 throw new AppException("Username '" + model.Username + "' is already taken");
