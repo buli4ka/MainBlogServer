@@ -44,12 +44,31 @@ namespace Server.DatabaseConfig
             {
                 relationship.DeleteBehavior = DeleteBehavior.Restrict;
             }
+            
             modelBuilder.Entity<Post>()
             .HasMany(e => e.PostImages)
             .WithOne()
             .HasForeignKey(x => x.PostId)
             .OnDelete(DeleteBehavior.Cascade);
             
+            // modelBuilder.Entity<Post>()
+            //     .HasMany(e => e.PostLikes)
+            //     .WithOne()
+            //     .HasForeignKey(x => x.PostId)
+            //     .OnDelete(DeleteBehavior.Cascade);
+            //
+            // modelBuilder.Entity<Post>()
+            //     .HasMany(e => e.PostComments)
+            //     .WithOne()
+            //     .HasForeignKey(x => x.PostId)
+            //     .OnDelete(DeleteBehavior.Cascade);
+            
+            // modelBuilder.Entity<User>()
+            //     .HasMany(e => e.CommentedPosts)
+            //     .WithOne()
+            //     .HasForeignKey(x => x.UserId)
+            //     .OnDelete(DeleteBehavior.Restrict);
+          
             base.OnModelCreating(modelBuilder);
 
         }

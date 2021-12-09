@@ -24,20 +24,7 @@ namespace Server.DatabaseConfig
                     ImagePath = "Resources/UserIcons/token_2.png",
                     ImageName = "token_2"
                 };
-
-                var image1 = new PostImage
-                {
-                    ImageType = "jpg",
-                    ImagePath = "Resources/Images/silvana.jpg",
-                    ImageName = "silvana"
-                };
-
-                var image2 = new PostImage
-                {
-                    ImageType = "jpg",
-                    ImagePath = "Resources/Images/Rick and Morty.jpg",
-                    ImageName = "Rick and Morty"
-                };
+                
 
                 var user1 = new User
                 {
@@ -94,7 +81,6 @@ namespace Server.DatabaseConfig
                         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus eget purus augue. Phasellus ultricies id eros vitae feugiat. Proin luctus ultrices sagittis. Praesent quis risus nunc. Aenean vehicula lectus at neque ullamcorper, eu vulputate justo scelerisque. Etiam nec consequat lectus, non faucibus dolor. Fusce eget mi porttitor, laoreet massa ut, faucibus enim. Curabitur at tortor non elit tincidunt tincidunt in et ex. Nam accumsan hendrerit luctus. Praesent aliquam est pharetra ex tempor fringilla. Fusce venenatis maximus diam et aliquam. Sed eget turpis nisi. Vestibulum tincidunt, sapien ut rhoncus euismod, elit neque sollicitudin sapien, id tincidunt neque mi eu turpis.",
                     Author = user1,
                     CreatedAt = DateTime.Now,
-                    PostImages = new List<PostImage> {image1, image2}
                 };
 
                 var post2 = new Post
@@ -104,7 +90,6 @@ namespace Server.DatabaseConfig
                         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus eget purus augue. Phasellus ultricies id eros vitae feugiat. Proin luctus ultrices sagittis. Praesent quis risus nunc. Aenean vehicula lectus at neque ullamcorper, eu vulputate justo scelerisque. Etiam nec consequat lectus, non faucibus dolor. Fusce eget mi porttitor, laoreet massa ut, faucibus enim. Curabitur at tortor non elit tincidunt tincidunt in et ex. Nam accumsan hendrerit luctus. Praesent aliquam est pharetra ex tempor fringilla. Fusce venenatis maximus diam et aliquam. Sed eget turpis nisi. Vestibulum tincidunt, sapien ut rhoncus euismod, elit neque sollicitudin sapien, id tincidunt neque mi eu turpis.",
                     Author = user2,
                     CreatedAt = DateTime.Now,
-                    PostImages = new List<PostImage> {image1, image2}
                 };
 
                 var post3 = new Post
@@ -114,7 +99,6 @@ namespace Server.DatabaseConfig
                         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus eget purus augue. Phasellus ultricies id eros vitae feugiat. Proin luctus ultrices sagittis. Praesent quis risus nunc. Aenean vehicula lectus at neque ullamcorper, eu vulputate justo scelerisque. Etiam nec consequat lectus, non faucibus dolor. Fusce eget mi porttitor, laoreet massa ut, faucibus enim. Curabitur at tortor non elit tincidunt tincidunt in et ex. Nam accumsan hendrerit luctus. Praesent aliquam est pharetra ex tempor fringilla. Fusce venenatis maximus diam et aliquam. Sed eget turpis nisi. Vestibulum tincidunt, sapien ut rhoncus euismod, elit neque sollicitudin sapien, id tincidunt neque mi eu turpis.",
                     Author = user3,
                     CreatedAt = DateTime.Now,
-                    PostImages = new List<PostImage> {image1, image2}
                 };
                 var post4 = new Post
                 {
@@ -123,7 +107,6 @@ namespace Server.DatabaseConfig
                         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus eget purus augue. Phasellus ultricies id eros vitae feugiat. Proin luctus ultrices sagittis. Praesent quis risus nunc. Aenean vehicula lectus at neque ullamcorper, eu vulputate justo scelerisque. Etiam nec consequat lectus, non faucibus dolor. Fusce eget mi porttitor, laoreet massa ut, faucibus enim. Curabitur at tortor non elit tincidunt tincidunt in et ex. Nam accumsan hendrerit luctus. Praesent aliquam est pharetra ex tempor fringilla. Fusce venenatis maximus diam et aliquam. Sed eget turpis nisi. Vestibulum tincidunt, sapien ut rhoncus euismod, elit neque sollicitudin sapien, id tincidunt neque mi eu turpis.",
                     Author = user4,
                     CreatedAt = DateTime.Now,
-                    PostImages = new List<PostImage> {image1, image2}
                 };
 
                 var postComment1 = new PostComment
@@ -198,7 +181,6 @@ namespace Server.DatabaseConfig
 
                 context.AddRange(
                     userIcon1, userIcon2
-                    , image1, image2
                     , user1, user2, user3, user4
                     , post1, post2, post3, post4
                     , postComment1, postComment2, postComment3, postComment4
