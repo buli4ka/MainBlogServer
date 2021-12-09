@@ -134,7 +134,7 @@ namespace Server.Services.PostServices
             _context.Remove(post);
             await _context.SaveChangesAsync();
 
-            var postDirectory = Path.GetDirectoryName(Path.Combine(Directory.GetCurrentDirectory(),
+            var postDirectory = Path.GetDirectoryName(Path.Combine(_appSettings.ProjectDirectory,
                 $"{_appSettings.PostImagesPath}/{postId}/"));
             if (postDirectory is not null)
             {

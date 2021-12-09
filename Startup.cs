@@ -89,6 +89,7 @@ namespace Server
             });
             
             // Setting AppSettings
+            Configuration["AppSettings:ProjectDirectory"] = Directory.GetCurrentDirectory();
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
             
             // Configuring relationship

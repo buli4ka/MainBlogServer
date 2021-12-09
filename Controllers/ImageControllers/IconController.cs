@@ -29,14 +29,13 @@ namespace Server.Controllers.ImageControllers
         public async Task<IActionResult> GetUserIconById(Guid imageId)
         {
             var image = await _imageService.GetUserIconById(imageId);
-            var projectPath = Directory.GetCurrentDirectory();
             if (image is null)
             {
-                return new PhysicalFileResult(Path.Combine(projectPath, _appSettings.NoImagePath),
+                return new PhysicalFileResult(Path.Combine(_appSettings.ProjectDirectory, _appSettings.NoImagePath),
                     "image/png");
             }
 
-            return new PhysicalFileResult(Path.Combine(projectPath, image.ImagePath),
+            return new PhysicalFileResult(Path.Combine(_appSettings.ProjectDirectory, image.ImagePath),
                 $"image/{image.ImageType}");
         }
 

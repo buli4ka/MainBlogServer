@@ -13,27 +13,26 @@ namespace Server.Utils
     public class FileOperations<TImage> where TImage : BaseImageModel, new()
     {
         private readonly AppSettings _appSettings;
-        private readonly string _projectPath;
 
         public FileOperations(AppSettings appSettings)
         {
             _appSettings = appSettings;
-            _projectPath = Directory.GetCurrentDirectory();
         }
 
 
         public async Task<TImage> GetAndCreateImage(IFormFile image, string relativePath)
         {
+            Console.WriteLine(_appSettings.ProjectDirectory);
             var imageType = Path.GetExtension(image.FileName)[1..];
             var imageName = Guid.NewGuid().ToString();
 
-            Directory.CreateDirectory(Path.Combine(_projectPath, relativePath));
+            Directory.CreateDirectory(Path.Combine(_appSettings.ProjectDirectory, relativePath));
 
             relativePath += imageName + '.' + imageType;
 
             try
             {
-                await using var fs = new FileStream(Path.Combine(_projectPath, relativePath),
+                await using var fs = new FileStream(Path.Combine(_appSettings.ProjectDirectory, relativePath),
                     FileMode.Create);
                 await image.CopyToAsync(fs);
             }
@@ -58,11 +57,11 @@ namespace Server.Utils
 
             relativePath += existingImage.ImageName + '.' + imageType;
 
-            File.Delete(Path.Combine(_projectPath, existingImage.ImagePath));
+            File.Delete(Path.Combine(_appSettings.ProjectDirectory, existingImage.ImagePath));
 
             try
             {
-                await using var fs = new FileStream(Path.Combine(_projectPath, relativePath),
+                await using var fs = new FileStream(Path.Combine(_appSettings.ProjectDirectory, relativePath),
                     FileMode.Create);
                 await image.CopyToAsync(fs);
             }
@@ -89,14 +88,14 @@ namespace Server.Utils
         public void DeleteFile(TImage existingImage)
         {
           
-            var postDirectory = Path.GetDirectoryName(Path.Combine(_projectPath, existingImage.ImagePath));
+            var postDirectory = Path.GetDirectoryName(Path.Combine(_appSettings.ProjectDirectory, existingImage.ImagePath));
 
             if (postDirectory == null)
             {
                 throw new Exception("This is very strange");
             }
             
-            File.Delete(Path.Combine(_projectPath, existingImage.ImagePath));
+            File.Delete(Path.Combine(_appSettings.ProjectDirectory, existingImage.ImagePath));
             
             if (!Directory.EnumerateFiles(postDirectory).Any())
                 Directory.Delete(postDirectory);
