@@ -9,7 +9,7 @@ namespace Server.DatabaseConfig
     {
         public DbSet<User> Users { get; set; }
         public DbSet<Post> Posts { get; set; }
-        public DbSet<PostImage> Images { get; set; }
+        public DbSet<PostImage> PostImages { get; set; }
         public DbSet<UserIcon> UserIcons { get; set; }
         public DbSet<PostComment> PostComments { get; set; }
         public DbSet<PostLike> PostLikes { get; set; }
@@ -44,7 +44,12 @@ namespace Server.DatabaseConfig
             {
                 relationship.DeleteBehavior = DeleteBehavior.Restrict;
             }
-
+            modelBuilder.Entity<Post>()
+            .HasMany(e => e.PostImages)
+            .WithOne()
+            .HasForeignKey(x => x.PostId)
+            .OnDelete(DeleteBehavior.Cascade);
+            
             base.OnModelCreating(modelBuilder);
 
         }

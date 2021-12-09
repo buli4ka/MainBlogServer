@@ -18,7 +18,7 @@ namespace Server.Services.PostServices
 
         Task Update(CreateUpdatePost model);
         
-        Task Delete(Guid postId);
+        Task Delete(Guid postId, Guid authorId);
 
 
     }

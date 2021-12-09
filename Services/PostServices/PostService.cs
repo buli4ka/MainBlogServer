@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -85,21 +86,26 @@ namespace Server.Services.PostServices
 
             _context.Add(post);
             await _context.SaveChangesAsync();
-            
-          
-
         }
 
         public async Task Update(CreateUpdatePost model)
         {
-            var post = await _context.Posts.FindAsync(model.Id);
+            var post = await _context.Posts
+                .Where(p => p.Id == model.Id)
+                .Include(p => p.Author)
+                .FirstOrDefaultAsync();
 
             if (post == null)
             {
                 throw new KeyNotFoundException("Post not found");
             }
 
-            _mapper.Map(model, post );
+            if (post.Author.Id != model.AuthorId)
+            {
+                throw new ForbbidenEcxeption("Not Correct author");
+            }
+
+            _mapper.Map(model, post);
 
             if (!CheckPost.isPostValid(post))
                 throw new AppException("Invalid post Data");
@@ -108,18 +114,32 @@ namespace Server.Services.PostServices
 
             _context.Update(post);
             await _context.SaveChangesAsync();
-            
         }
 
-        public async Task Delete(Guid postId)
+        public async Task Delete(Guid postId, Guid authorId)
         {
-            var post = await _context.Posts.FindAsync(postId);
+            var post = await _context.Posts
+                .Where(p => p.Id == postId)
+                .Include(p => p.Author)
+                .FirstOrDefaultAsync();
 
             if (post == null)
                 throw new KeyNotFoundException("Post not found");
 
+            if (post.Author.Id != authorId)
+            {
+                throw new ForbbidenEcxeption("Not Correct author");
+            }
+
             _context.Remove(post);
             await _context.SaveChangesAsync();
+
+            var postDirectory = Path.GetDirectoryName(Path.Combine(Directory.GetCurrentDirectory(),
+                _appSettings.PostImagesPath, postId.ToString()));
+            if (postDirectory is not null)
+            {
+                Directory.Delete(postDirectory, true);
+            }
         }
     }
 }

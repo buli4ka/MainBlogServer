@@ -33,6 +33,7 @@ namespace Server.Controllers.PostControllers
         {
             return Ok(await _postService.GetAllByUserId(authorId));
         }
+        [AllowAnonymous]
 
         [HttpPost("CreatePost")]
         public async Task<IActionResult> CreatePost(CreateUpdatePost post)
@@ -40,18 +41,20 @@ namespace Server.Controllers.PostControllers
             await _postService.Create(post);
             return Ok("Post Created");
         }
-        
+        [AllowAnonymous]
+
         [HttpPut("UpdatePost")]
         public async Task<IActionResult> UpdatePost(CreateUpdatePost post)
         {
             await _postService.Update(post);
             return Ok("Post Updated");
         }
-        
-        [HttpDelete("DeletePost/{postId:guid}")]
-        public async Task<IActionResult> DeletePost(Guid postId)
+        [AllowAnonymous]
+
+        [HttpDelete("DeletePost")]
+        public async Task<IActionResult> DeletePost([FromQuery(Name = "postId")] Guid postId, [FromQuery(Name = "authorId")] Guid authorId)
         {
-            await _postService.Delete(postId);
+            await _postService.Delete(postId, authorId);
             return NoContent();
         }
         

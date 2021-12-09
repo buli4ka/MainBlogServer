@@ -18,6 +18,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Server.DatabaseConfig;
 using Server.Exceptions;
+using Server.Services.ImageServices;
 using Server.Services.PostServices;
 using Server.Services.UserServices;
 using Server.Utils;
@@ -94,10 +95,8 @@ namespace Server
             services.AddScoped<IJwtUtils, JwtUtils>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IPostService, PostService>();
+            services.AddScoped<IImageService, ImageService>();
 
-
-            
-            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
