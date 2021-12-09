@@ -14,9 +14,9 @@ namespace Server.Services.UserServices
         
         Task<IEnumerable<User>> GetAll();
         
-        Task<IEnumerable<AuthorView>> GetUserSubscribers(Guid userId);
+        Task<IEnumerable<AuthorPreview>> GetUserSubscribers(Guid userId);
         
-        Task<IEnumerable<AuthorView>> GetUserSubscribed(Guid userId);
+        Task<IEnumerable<AuthorPreview>> GetUserSubscribed(Guid userId);
 
         
         Task<AuthorView> GetAuthorById(Guid authorId);

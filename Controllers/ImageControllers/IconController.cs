@@ -13,12 +13,12 @@ namespace Server.Controllers.ImageControllers
     [ControllerAttributes.Authorize]
     [ApiController]
     [Route("api/[controller]")]
-    public class ImageController : ControllerBase
+    public class IconController : ControllerBase
     {
         private readonly AppSettings _appSettings;
-        private readonly IImageService _imageService;
+        private readonly IIconService _imageService;
 
-        public ImageController(IOptions<AppSettings> appSettings, IImageService imageService)
+        public IconController(IOptions<AppSettings> appSettings, IIconService imageService)
         {
             _appSettings = appSettings.Value;
             _imageService = imageService;
@@ -28,7 +28,7 @@ namespace Server.Controllers.ImageControllers
         [HttpGet("getById/{imageId:guid}")]
         public async Task<IActionResult> GetById(Guid imageId)
         {
-            var image = await _imageService.GetPostImageById(imageId);
+            var image = await _imageService.GetUserIconById(imageId);
             var projectPath = Directory.GetCurrentDirectory();
             if (image is null)
             {
@@ -41,28 +41,19 @@ namespace Server.Controllers.ImageControllers
         }
 
         [AllowAnonymous] // todo remove
-
-        [HttpPost("AddPostImage/{postId:guid}"), DisableRequestSizeLimit]
-        public async Task<IActionResult> AddPostImage([FromForm] FileView file, Guid postId)
+        [HttpPost("AddPostImage/{userId:guid}"), DisableRequestSizeLimit]
+        public async Task<IActionResult> AddPostImage([FromForm] FileView file, Guid userId)
         {
-            await _imageService.AddPostImage(file, postId);
+            await _imageService.AddOrUpdateUserIcon(file, userId);
             return Ok();
         }
-        [AllowAnonymous] // todo remove
 
-        [HttpPut("UpdatePostImage"), DisableRequestSizeLimit]
-        public async Task<IActionResult> UpdatePostImage([FromForm] FileView file,
-            [FromQuery(Name = "postId")] Guid postId, [FromQuery(Name = "imageId")] Guid imageId)
-        {
-            await _imageService.UpdatePostImage(file, postId, imageId);
-            return Ok();
-        }
-        [AllowAnonymous] // todo remove
 
+        [AllowAnonymous] // todo remove
         [HttpDelete("DeletePostImage/{imageId:guid}")]
         public async Task<IActionResult> DeletePostImage(Guid imageId)
         {
-            await _imageService.DeletePostImage(imageId);
+            await _imageService.DeleteUserIcon(imageId);
             return Ok();
         }
     }

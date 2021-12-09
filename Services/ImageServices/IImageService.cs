@@ -10,7 +10,6 @@ namespace Server.Services.ImageServices
     {
         public Task<PostImage> GetPostImageById(Guid imageId);
         
-        // public Task<string> GetUserIconPathById(Guid imageId);
         public Task AddPostImage(FileView file, Guid postId);
         
         public Task UpdatePostImage(FileView file, Guid postId, Guid imageId);

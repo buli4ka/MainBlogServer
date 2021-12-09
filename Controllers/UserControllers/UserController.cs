@@ -44,6 +44,8 @@ namespace Server.Controllers.UserControllers
             var user = await _userService.Register(model);
             return Ok(user);
         }
+        
+        [AllowAnonymous] // todo remove
         [HttpPost("subscribe")]
         public async Task<IActionResult> Subscribe(SubscribeRequest model)
         {
@@ -51,6 +53,7 @@ namespace Server.Controllers.UserControllers
             return Ok();
         }
         
+        [AllowAnonymous] // todo remove
         [HttpPost("unsubscribe")]
         public async Task<IActionResult> Unsubscribe(SubscribeRequest model)
         {
@@ -58,7 +61,7 @@ namespace Server.Controllers.UserControllers
             return Ok();
         }
 
-        [AllowAnonymous] // todo shouldn't be here 
+        [AllowAnonymous] // todo remove
 
         [HttpGet("getAll")]
         public async Task<IActionResult> GetAll()
@@ -67,11 +70,27 @@ namespace Server.Controllers.UserControllers
             return Ok(users);
         }
         
-        [AllowAnonymous] // todo shouldn't be here 
+        [AllowAnonymous] // todo remove
         [HttpGet("getById/{id:guid}")]
         public async Task<IActionResult> GetById(Guid id)
         {
             var user = await _userService.GetUserById(id);
+            return Ok(user);
+        }
+        
+        [AllowAnonymous] // todo remove
+        [HttpGet("GetUserSubscribers/{userId:guid}")]
+        public async Task<IActionResult> GetUserSubscribers(Guid userId)
+        {
+            var user = await _userService.GetUserSubscribers(userId);
+            return Ok(user);
+        }
+        
+        [AllowAnonymous] // todo remove
+        [HttpGet("GetUserSubscribed/{userId:guid}")]
+        public async Task<IActionResult> GetUserSubscribed(Guid userId)
+        {
+            var user = await _userService.GetUserSubscribed(userId);
             return Ok(user);
         }
         
@@ -84,6 +103,7 @@ namespace Server.Controllers.UserControllers
         }
         
         
+        [AllowAnonymous] // todo remove
         // how to update
         [HttpPut("update/{id:guid}")]
         public async Task<IActionResult> Update(Guid id, UpdateRequest model)
@@ -92,6 +112,7 @@ namespace Server.Controllers.UserControllers
             return Ok(user);
         }
         
+        [AllowAnonymous] // todo remove
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {

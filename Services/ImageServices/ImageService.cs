@@ -17,13 +17,14 @@ namespace Server.Services.ImageServices
     {
         private readonly Context _context;
         private readonly AppSettings _appSettings;
-        private readonly string _projectPath;
+        private readonly FileOperations<PostImage> _fileOperations;
+
 
         public ImageService(IOptions<AppSettings> appSettings, Context context)
         {
             _context = context;
             _appSettings = appSettings.Value;
-            _projectPath = Directory.GetCurrentDirectory();
+            _fileOperations = new FileOperations<PostImage>(appSettings.Value);
         }
 
         public async Task<PostImage> GetPostImageById(Guid imageId)
@@ -34,35 +35,14 @@ namespace Server.Services.ImageServices
         public async Task AddPostImage(FileView file, Guid postId)
         {
             var image = file.File;
+
+            _fileOperations.ThrowLengthError(image.Length);
+
             var relativePath = $"{_appSettings.PostImagesPath}/{postId}/";
 
-            if (image.Length <= 0)
-                throw new AppException("Image is empty");
-
-            var imageType = Path.GetExtension(image.FileName)[1..];
-            var imageName = Guid.NewGuid().ToString();
-
-            Directory.CreateDirectory(Path.Combine(_projectPath, relativePath));
-            relativePath += imageName + '.' + imageType;
-            try
-            {
-                await using var fs = new FileStream(Path.Combine(_projectPath, relativePath),
-                    FileMode.Create);
-                await image.CopyToAsync(fs);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw new Exception("Internal server error, an error was occured when saving an image");
-            }
-
-            var result = new PostImage
-            {
-                ImageType = imageType,
-                ImageName = imageName,
-                ImagePath = relativePath,
-                PostId = postId
-            };
+            var result = await _fileOperations.GetAndCreateImage(image, relativePath);
+            result.PostId = postId;
+            
             _context.Add(result);
             await _context.SaveChangesAsync();
         }
@@ -70,41 +50,21 @@ namespace Server.Services.ImageServices
 
         public async Task UpdatePostImage(FileView file, Guid postId, Guid imageId)
         {
+            var image = file.File;
             var existingImage = await _context.PostImages.FindAsync(imageId);
+            
             if (existingImage == null)
             {
                 throw new KeyNotFoundException("Nothing to update");
             }
+            
+            _fileOperations.ThrowLengthError(image.Length);
 
-            var image = file.File;
             var relativePath = $"{_appSettings.PostImagesPath}/{postId}/";
 
-            if (image.Length <= 0)
-                throw new AppException("Image is empty");
-
-            var imageType = Path.GetExtension(image.FileName)[1..];
-
-            relativePath += existingImage.ImageName + '.' + imageType;
-
-            File.Delete(Path.Combine(_projectPath, existingImage.ImagePath));
-
-            try
-            {
-                await using var fs = new FileStream(Path.Combine(_projectPath, relativePath),
-                    FileMode.Create);
-                await image.CopyToAsync(fs);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw new Exception("Internal server error, an error was occured when saving an image");
-            }
-
-           
-            existingImage.ImageType = imageType;
-            existingImage.ImagePath = relativePath;
-
-            _context.Update(existingImage);
+            var result = await _fileOperations.GetAndUpdateImage(image, relativePath, existingImage);
+            
+            _context.Update(result);
             await _context.SaveChangesAsync();
         }
 
@@ -116,21 +76,12 @@ namespace Server.Services.ImageServices
             {
                 throw new KeyNotFoundException("No image found");
             }
-
-            File.Delete(Path.Combine(_projectPath, existingImage.ImagePath));
+            
+            _fileOperations.DeleteFile(existingImage);
             
             _context.Remove(existingImage);
+            
             await _context.SaveChangesAsync();
-            
-            var postDirectory = Path.GetDirectoryName(Path.Combine(_projectPath, existingImage.ImagePath));
-
-            if (postDirectory == null)
-            {
-                throw new Exception("This is very strange");
-            }
-            
-            if (!Directory.EnumerateFiles(postDirectory).Any())
-                Directory.Delete(postDirectory);
             
            
         }

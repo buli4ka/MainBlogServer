@@ -96,6 +96,8 @@ namespace Server
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IPostService, PostService>();
             services.AddScoped<IImageService, ImageService>();
+            services.AddScoped<IIconService, IconService>();
+
 
         }
 

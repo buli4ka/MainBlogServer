@@ -74,11 +74,12 @@ namespace Server.Services.UserServices
             return await _context.Users.ToListAsync();
         }
 
-        public async Task<IEnumerable<AuthorView>> GetUserSubscribers(Guid userId)
+        public async Task<IEnumerable<AuthorPreview>> GetUserSubscribers(Guid userId)
         {
             var user = await _context.Users
                 .Where(p => p.Id == userId)
                 .Include(user => user.Subscribers)
+                .Include(user => user.Subscribed)
                 .ThenInclude(user => user.UserIcon)
                 .FirstOrDefaultAsync();
 
@@ -87,22 +88,15 @@ namespace Server.Services.UserServices
                 throw new KeyNotFoundException("No users have been found");
             }
 
-            var subscribers = new List<AuthorView>();
-            foreach (var subscriber in user.Subscribers)
-            {
-                var sub = _mapper.Map<AuthorView>(subscriber);
-                sub.IconUrl = _appSettings.AppUrl + "UserIcon/getById/" + subscriber.UserIcon.Id;
-                subscribers.Add(sub);
-            }
-
-            return subscribers;
+            return user.Subscribers.Select(subscriber => _mapper.Map<AuthorPreview>(subscriber)).ToList();
         }
 
-        public async Task<IEnumerable<AuthorView>> GetUserSubscribed(Guid userId)
+        public async Task<IEnumerable<AuthorPreview>> GetUserSubscribed(Guid userId)
         {
             var user = await _context.Users
                 .Where(p => p.Id == userId)
                 .Include(user => user.Subscribed)
+                .Include(user => user.Subscribers)
                 .ThenInclude(user => user.UserIcon)
                 .FirstOrDefaultAsync();
 
@@ -111,15 +105,7 @@ namespace Server.Services.UserServices
                 throw new KeyNotFoundException("No users have been found");
             }
 
-            var subscribedUsers = new List<AuthorView>();
-            foreach (var subscribed in user.Subscribed)
-            {
-                var sub = _mapper.Map<AuthorView>(subscribed);
-                sub.IconUrl = _appSettings.AppUrl + "UserIcon/getById/" + subscribed.UserIcon.Id;
-                subscribedUsers.Add(sub);
-            }
-
-            return subscribedUsers;
+            return user.Subscribed.Select(subscribed => _mapper.Map<AuthorPreview>(subscribed)).ToList();
         }
 
         public async Task<AuthorView> GetAuthorById(Guid authorId)

@@ -21,15 +21,13 @@ namespace Server.ViewModels.UserViewModels
 
         public int QuantityOfSubscribed { get; set; }
     }
-    
+
     public class AuthorPreview : BaseModel
     {
-        public string Username { get; set; }
+        public string Biography { get; set; }
         
+        public string Username { get; set; }
+
         public string IconUrl { get; set; }
-
     }
-
-    
-    
 }
