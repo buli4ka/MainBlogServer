@@ -1,11 +1,18 @@
-using System;
+using System.ComponentModel.DataAnnotations;
+using Server.Models;
 using Server.Models.UserModels;
 
 namespace Server.ViewModels.UserViewModels
 {
-    public class AuthenticateResponse
+    public class AuthenticateRequest
     {
-        public Guid Id { get; set; }
+        [Required] public string Username { get; set; }
+
+        [Required] public string HashedPassword { get; set; }
+    }
+    
+    public class AuthenticateResponse : BaseModel
+    {
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Username { get; set; }
@@ -29,5 +36,22 @@ namespace Server.ViewModels.UserViewModels
             IsPrivate = user.IsPrivate;
             JwtToken = token;
         }
+    }
+    public class RegisterRequest
+    {
+        [Required]
+        public string FirstName { get; set; }
+        
+        [Required]
+        public string Email { get; set; }
+        
+        [Required]
+        public string LastName { get; set; }
+
+        [Required]
+        public string Username { get; set; }
+
+        [Required]
+        public string HashedPassword { get; set; }
     }
 }

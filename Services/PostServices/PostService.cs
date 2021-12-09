@@ -80,7 +80,7 @@ namespace Server.Services.PostServices
         {
             var post = _mapper.Map<Post>(model);
 
-            if (!CheckPost.isPostValid(post))
+            if (!CheckPost.IsPostValid(post))
                 throw new AppException("Invalid post Data");
             post.CreatedAt = DateTime.Now;
 
@@ -107,7 +107,7 @@ namespace Server.Services.PostServices
 
             _mapper.Map(model, post);
 
-            if (!CheckPost.isPostValid(post))
+            if (!CheckPost.IsPostValid(post))
                 throw new AppException("Invalid post Data");
 
             post.UpdatedAt = DateTime.Now;
@@ -140,6 +140,34 @@ namespace Server.Services.PostServices
             {
                 Directory.Delete(postDirectory, true);
             }
+        }
+
+        public async Task AddRemoveLike(AddLike requestLike)
+        {
+            var post = await _context.Posts
+                .Where(p => p.Id == requestLike.PostId)
+                .Include(p => p.PostLikes)
+                .ThenInclude(postLike => postLike.User)
+                .AsSplitQuery()
+                .FirstOrDefaultAsync();
+
+            if (post == null)
+            {
+                throw new KeyNotFoundException("Post not found");
+            }
+
+            var like = post.PostLikes
+                .FirstOrDefault(p => p.PostId == requestLike.PostId && p.UserId == requestLike.UserId);
+
+            if (like != null) 
+            {
+                _context.PostLikes.Remove(like);
+                await _context.SaveChangesAsync();
+                return;
+            }
+
+            _context.PostLikes.Add(_mapper.Map<PostLike>(requestLike));
+            await _context.SaveChangesAsync();
         }
     }
 }

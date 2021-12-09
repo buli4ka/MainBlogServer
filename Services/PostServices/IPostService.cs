@@ -20,6 +20,8 @@ namespace Server.Services.PostServices
         
         Task Delete(Guid postId, Guid authorId);
 
+        Task AddRemoveLike(AddLike requestLike);
+
 
     }
 }

@@ -49,11 +49,13 @@ namespace Server.Services.UserServices
 
         public async Task<AuthenticateResponse> Register(RegisterRequest model)
         {
+
             if (await _context.Users.AnyAsync(x => x.Username == model.Username))
                 throw new AppException("Username '" + model.Username + "' is already taken");
 
             if (await _context.Users.AnyAsync(x => x.Email == model.Email))
                 throw new AppException("Email '" + model.Email + "' is already taken");
+
 
             var user = _mapper.Map<User>(model);
 
@@ -64,7 +66,9 @@ namespace Server.Services.UserServices
 
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
+
             var response = _mapper.Map<AuthenticateResponse>(user);
+
             response.JwtToken = _jwtUtils.GenerateToken(user);
             return response;
         }
@@ -81,6 +85,7 @@ namespace Server.Services.UserServices
                 .Include(user => user.Subscribers)
                 .Include(user => user.Subscribed)
                 .ThenInclude(user => user.UserIcon)
+                .AsSplitQuery()
                 .FirstOrDefaultAsync();
 
             if (user?.Subscribers == null)
@@ -98,6 +103,7 @@ namespace Server.Services.UserServices
                 .Include(user => user.Subscribed)
                 .Include(user => user.Subscribers)
                 .ThenInclude(user => user.UserIcon)
+                .AsSplitQuery()
                 .FirstOrDefaultAsync();
 
             if (user?.Subscribed == null)
@@ -189,12 +195,14 @@ namespace Server.Services.UserServices
                 .Where(u => u.Id == model.UserId)
                 .Include(u => u.Subscribers)
                 .Include(u => u.Subscribed)
+                .AsSplitQuery()
                 .FirstOrDefaultAsync();
 
             var author = await _context.Users
                 .Where(a => a.Id == model.AuthorId)
                 .Include(a => a.Subscribers)
                 .Include(a => a.Subscribed)
+                .AsSplitQuery()
                 .FirstOrDefaultAsync();
             if (user == null)
             {
@@ -227,12 +235,14 @@ namespace Server.Services.UserServices
                 .Where(u => u.Id == model.UserId)
                 .Include(u => u.Subscribers)
                 .Include(u => u.Subscribed)
+                .AsSplitQuery()
                 .FirstOrDefaultAsync();
 
             var author = await _context.Users
                 .Where(a => a.Id == model.AuthorId)
                 .Include(a => a.Subscribers)
                 .Include(a => a.Subscribed)
+                .AsSplitQuery()
                 .FirstOrDefaultAsync();
             if (user == null)
             {

@@ -14,12 +14,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Server.DatabaseConfig;
 using Server.Exceptions;
 using Server.Services.ImageServices;
 using Server.Services.PostServices;
+using Server.Services.PostServices.PostCommentServices;
 using Server.Services.UserServices;
 using Server.Utils;
 using Server.Utils.Jwt;
@@ -97,6 +97,7 @@ namespace Server
             services.AddScoped<IPostService, PostService>();
             services.AddScoped<IImageService, ImageService>();
             services.AddScoped<IIconService, IconService>();
+            services.AddScoped<IPostCommentService, PostCommentService>();
 
 
         }

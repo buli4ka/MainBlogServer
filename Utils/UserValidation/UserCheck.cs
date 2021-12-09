@@ -7,8 +7,7 @@ namespace Server.Utils.UserValidation
     {
         public static bool IsUserValid(User user)
         {
-            return user.FirstName.Length <= 50 && user.LastName.Length <= 50 && user.Username.Length <= 50 &&
-                   user.Biography.Length <= 200;
+            return user.FirstName.Length <= 50 && user.LastName.Length <= 50 && user.Username.Length <= 50 ;
         }
         
 

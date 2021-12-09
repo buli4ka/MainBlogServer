@@ -58,5 +58,14 @@ namespace Server.Controllers.PostControllers
             return NoContent();
         }
         
+        [AllowAnonymous] // todo remove
+
+        [HttpPost("AddLike")]
+        public async Task<IActionResult> AddLike(AddLike like)
+        {
+            await _postService.AddRemoveLike(like);
+            return Ok();
+        }
+        
     }
 }

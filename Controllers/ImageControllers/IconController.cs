@@ -26,7 +26,7 @@ namespace Server.Controllers.ImageControllers
 
         [AllowAnonymous]
         [HttpGet("getById/{imageId:guid}")]
-        public async Task<IActionResult> GetById(Guid imageId)
+        public async Task<IActionResult> GetUserIconById(Guid imageId)
         {
             var image = await _imageService.GetUserIconById(imageId);
             var projectPath = Directory.GetCurrentDirectory();
@@ -41,8 +41,8 @@ namespace Server.Controllers.ImageControllers
         }
 
         [AllowAnonymous] // todo remove
-        [HttpPost("AddPostImage/{userId:guid}"), DisableRequestSizeLimit]
-        public async Task<IActionResult> AddPostImage([FromForm] FileView file, Guid userId)
+        [HttpPost("AddOrUpdateUserIcon/{userId:guid}"), DisableRequestSizeLimit]
+        public async Task<IActionResult> AddOrUpdateUserIcon([FromForm] FileView file, Guid userId)
         {
             await _imageService.AddOrUpdateUserIcon(file, userId);
             return Ok();
@@ -50,8 +50,8 @@ namespace Server.Controllers.ImageControllers
 
 
         [AllowAnonymous] // todo remove
-        [HttpDelete("DeletePostImage/{imageId:guid}")]
-        public async Task<IActionResult> DeletePostImage(Guid imageId)
+        [HttpDelete("DeleteUserIcon/{imageId:guid}")]
+        public async Task<IActionResult> DeleteUserIcon(Guid imageId)
         {
             await _imageService.DeleteUserIcon(imageId);
             return Ok();
