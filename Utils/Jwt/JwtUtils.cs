@@ -29,7 +29,10 @@ namespace Server.Utils.Jwt
                     new[]
                     {
                         new Claim("id", user.Id.ToString()),
-                        new Claim("username", user.Username)
+                        new Claim("username", user.Username),
+                        new Claim("firstName", user.FirstName),
+                        new Claim("lastName", user.LastName),
+                        new Claim("email", user.Email),
                     }
                 ),
                 Expires = DateTime.UtcNow.AddHours(2),

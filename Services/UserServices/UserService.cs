@@ -59,8 +59,8 @@ namespace Server.Services.UserServices
 
             var user = _mapper.Map<User>(model);
 
-            if (!UserCheck.IsUserValid(user))
-                throw new AppException("Not valid user data");
+            // if (!UserCheck.IsUserValid(user))
+            //     throw new AppException("Not valid user data");
 
             user.HashedPassword = UserCheck.HashPassword(model.HashedPassword);
 
