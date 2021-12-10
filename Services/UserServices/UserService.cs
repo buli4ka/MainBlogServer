@@ -58,10 +58,7 @@ namespace Server.Services.UserServices
 
 
             var user = _mapper.Map<User>(model);
-
-            // if (!UserCheck.IsUserValid(user))
-            //     throw new AppException("Not valid user data");
-
+            
             user.HashedPassword = UserCheck.HashPassword(model.HashedPassword);
 
             _context.Users.Add(user);
@@ -213,58 +210,24 @@ namespace Server.Services.UserServices
             {
                 throw new KeyNotFoundException("Author not found");
             }
+            
+            if (author.Subscribers.FirstOrDefault(u => u.Id == user.Id) != null ||
+                user.Subscribed.FirstOrDefault(u => u.Id == author.Id) != null)
+            {
+                user.Subscribed.Remove(author);
+                author.Subscribers.Remove(user);
+                _context.Users.UpdateRange(user, author);
+                await _context.SaveChangesAsync();
+                return;
+            }
 
-            var subscribed = user.Subscribed != null
-                ? new List<User>(user.Subscribed) {author}
-                : new List<User> {author};
-            user.Subscribed = subscribed;
-
-            var subscribers = author.Subscribers != null
-                ? new List<User>(author.Subscribers) {user}
-                : new List<User> {user};
-            author.Subscribers = subscribers;
-
+            user.Subscribed.Add(author);
+            author.Subscribers.Add(user);
 
             _context.Users.UpdateRange(user, author);
             await _context.SaveChangesAsync();
         }
 
-        public async Task Unsubscribe(SubscribeRequest model)
-        {
-            var user = await _context.Users
-                .Where(u => u.Id == model.UserId)
-                .Include(u => u.Subscribers)
-                .Include(u => u.Subscribed)
-                .AsSplitQuery()
-                .FirstOrDefaultAsync();
-
-            var author = await _context.Users
-                .Where(a => a.Id == model.AuthorId)
-                .Include(a => a.Subscribers)
-                .Include(a => a.Subscribed)
-                .AsSplitQuery()
-                .FirstOrDefaultAsync();
-            if (user == null)
-            {
-                throw new KeyNotFoundException("User not found");
-            }
-
-            if (author == null)
-            {
-                throw new KeyNotFoundException("Author not found");
-            }
-
-            var subscribed = new List<User>(user.Subscribed);
-            user.Subscribed.Remove(author);
-            var subscribers = new List<User>(author.Subscribers);
-            subscribers.Remove(user);
-
-            user.Subscribed = subscribed;
-            author.Subscribers = subscribers;
-
-
-            _context.Users.UpdateRange(user, author);
-            await _context.SaveChangesAsync();
-        }
+     
     }
 }

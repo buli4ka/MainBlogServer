@@ -7,6 +7,12 @@ namespace Server.Models.UserModels
 {
     public class User : BaseModel
     {
+
+        public User()
+        {
+            Subscribers = new List<User>();
+            Subscribed = new List<User>();
+        }
         [MaxLength(50)] public string FirstName { get; set; }
 
         [MaxLength(50)] public string LastName { get; set; }

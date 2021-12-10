@@ -28,10 +28,8 @@ namespace Server.Services.UserServices
         Task Delete(Guid userId);
         
         Task Subscribe(SubscribeRequest model);
-        
-        Task Unsubscribe(SubscribeRequest model);
-        
-      
+
+
 
     }
 }

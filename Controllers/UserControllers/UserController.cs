@@ -54,14 +54,6 @@ namespace Server.Controllers.UserControllers
         }
         
         [AllowAnonymous] // todo remove
-        [HttpPost("unsubscribe")]
-        public async Task<IActionResult> Unsubscribe(SubscribeRequest model)
-        {
-            await _userService.Unsubscribe(model);
-            return Ok();
-        }
-
-        [AllowAnonymous] // todo remove
 
         [HttpGet("getAll")]
         public async Task<IActionResult> GetAll()
