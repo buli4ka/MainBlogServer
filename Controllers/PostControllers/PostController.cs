@@ -21,6 +21,13 @@ namespace Server.Controllers.PostControllers
         }
 
         [AllowAnonymous]
+        [HttpGet("getAll")]
+        public async Task<IActionResult> Get()
+        {
+            return Ok(await _postService.GetAll());
+        }
+        
+        [AllowAnonymous]
         [HttpGet("getById/{postId:guid}")]
         public async Task<IActionResult> Get(Guid postId)
         {

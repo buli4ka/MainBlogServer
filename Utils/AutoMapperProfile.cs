@@ -9,7 +9,7 @@ namespace Server.Utils
 {
     public class AutoMapperProfile : Profile
     {
-        private const string AppDomain = "https://localhost:5001/";
+        private const string AppDomain = "https://localhost:5001/api/";
 
         public AutoMapperProfile()
         {

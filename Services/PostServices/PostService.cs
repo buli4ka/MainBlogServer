@@ -29,9 +29,16 @@ namespace Server.Services.PostServices
             _mapper = mapper;
         }
 
-        public async Task<List<Post>> GetAll()
+        public async Task<List<PostPreview>> GetAll()
         {
-            return await _context.Posts.ToListAsync();
+            var posts = await _context.Posts
+                .Include(post => post.PostImages)
+                .Include(post => post.PostComments)
+                .Include(post => post.PostLikes)
+                .Include(post => post.Author)
+                .AsSplitQuery()
+                .ToListAsync();
+            return posts.Select(post => _mapper.Map<PostPreview>(post)).ToList();
         }
 
         public async Task<PostView> GetPostById(Guid postId)
@@ -159,7 +166,7 @@ namespace Server.Services.PostServices
             var like = post.PostLikes
                 .FirstOrDefault(p => p.PostId == requestLike.PostId && p.UserId == requestLike.UserId);
 
-            if (like != null) 
+            if (like != null)
             {
                 _context.PostLikes.Remove(like);
                 await _context.SaveChangesAsync();

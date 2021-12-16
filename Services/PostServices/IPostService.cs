@@ -8,7 +8,7 @@ namespace Server.Services.PostServices
 {
     public interface IPostService
     {
-        Task<List<Post>> GetAll();
+        Task<List<PostPreview>> GetAll();
         
         Task<PostView> GetPostById(Guid postId);
         
