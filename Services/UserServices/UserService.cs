@@ -80,6 +80,7 @@ namespace Server.Services.UserServices
             var user = await _context.Users
                 .Where(p => p.Id == userId)
                 .Include(user => user.Subscribers)
+                .ThenInclude(user => user.UserIcon)
                 .Include(user => user.Subscribed)
                 .ThenInclude(user => user.UserIcon)
                 .AsSplitQuery()
@@ -98,6 +99,7 @@ namespace Server.Services.UserServices
             var user = await _context.Users
                 .Where(p => p.Id == userId)
                 .Include(user => user.Subscribed)
+                .ThenInclude(user => user.UserIcon)
                 .Include(user => user.Subscribers)
                 .ThenInclude(user => user.UserIcon)
                 .AsSplitQuery()
