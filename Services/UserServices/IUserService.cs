@@ -27,6 +27,7 @@ namespace Server.Services.UserServices
         Task Delete(Guid userId);
         
         Task Subscribe(SubscribeRequest model);
+        Task<bool> IsSubscribed(Guid userId, Guid authorId);
 
 
 

@@ -141,12 +141,15 @@ namespace Server.Services.UserServices
                 .Include(user => user.Subscribed)
                 .Include(user => user.Subscribers)
                 .Include(user => user.Posts)
+                .ThenInclude(post => post.PostImages)
                 .Include(user => user.LikedPosts)
+                // .ThenInclude(like => like.Post)
                 .Include(user => user.UserIcon)
                 .AsSplitQuery()
                 .FirstOrDefaultAsync();
 
             if (user == null) throw new KeyNotFoundException("User not found");
+            
             return _mapper.Map<UserView>(user);
         }
 
@@ -228,6 +231,22 @@ namespace Server.Services.UserServices
             await _context.SaveChangesAsync();
         }
 
-     
+        public async Task<bool> IsSubscribed(Guid userId, Guid authorId)
+        {
+            var user = await _context.Users
+                .Where(u => u.Id == authorId)
+                .Include(u => u.Subscribers)
+                .AsSplitQuery()
+                .FirstOrDefaultAsync();
+            
+            if (user == null)
+            {
+                throw new KeyNotFoundException("User not found");
+            }
+            
+            var check =user.Subscribers.FirstOrDefault(u => u.Id == userId);
+
+            return check != null;
+        }
     }
 }

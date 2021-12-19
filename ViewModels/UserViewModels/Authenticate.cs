@@ -41,7 +41,7 @@ namespace Server.ViewModels.UserViewModels
 
         [Required] [MaxLength(50)] public string HashedPassword { get; set; }
 
-        [MaxLength(200)] public string Biography { get; set; }
+        public string Biography { get; set; }
 
         public bool IsPrivate { get; set; }
     }

@@ -64,12 +64,12 @@ namespace Server.Utils
             CreateMap<User, AuthorPreview>()
                 .ForMember("IconUrl",
                     opt => opt.MapFrom(user =>
-                        AppDomain + "UserIcon/getById/" + user.UserIcon.Id)); // todo change to _appSettings
+                        AppDomain + "Icon/getById/" + user.UserIcon.Id)); // todo change to _appSettings
             
             CreateMap<User, UserView>()
                 .ForMember("IconUrl",
                     opt => opt.MapFrom(user =>
-                        AppDomain + "UserIcon/getById/" + user.UserIcon.Id)) // todo change to _appSettings
+                        AppDomain + "Icon/getById/" + user.UserIcon.Id)) // todo change to _appSettings
                 .ForMember("QuantityOfSubscribers",
                     opt => opt.MapFrom(user =>
                         user.Subscribers.Count))
@@ -80,7 +80,7 @@ namespace Server.Utils
             CreateMap<User, AuthorView>()
                 .ForMember("IconUrl",
                     opt => opt.MapFrom(user =>
-                        AppDomain + "UserIcon/getById/" + user.UserIcon.Id)) // todo change to _appSettings
+                        AppDomain + "Icon/getById/" + user.UserIcon.Id)) // todo change to _appSettings
                 .ForMember("QuantityOfSubscribers",
                     opt => opt.MapFrom(user =>
                         user.Subscribers.Count))

@@ -13,7 +13,7 @@ namespace Server.Controllers.UserControllers
     [ControllerAttributes.Authorize]
     [ApiController]
     [Route("api/[controller]")]
-    public class UserController: ControllerBase
+    public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
         private IMapper _mapper;
@@ -28,7 +28,7 @@ namespace Server.Controllers.UserControllers
             _mapper = mapper;
             _appSettings = appSettings.Value;
         }
-        
+
         [AllowAnonymous]
         [HttpPost("authenticate")]
         public async Task<IActionResult> Authenticate(AuthenticateRequest model)
@@ -36,7 +36,7 @@ namespace Server.Controllers.UserControllers
             var response = await _userService.Authenticate(model);
             return Ok(response);
         }
-        
+
         [AllowAnonymous]
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterRequest model)
@@ -44,7 +44,7 @@ namespace Server.Controllers.UserControllers
             var user = await _userService.Register(model);
             return Ok(user);
         }
-        
+
         [AllowAnonymous] // todo remove
         [HttpPost("subscribe")]
         public async Task<IActionResult> Subscribe(SubscribeRequest model)
@@ -52,16 +52,15 @@ namespace Server.Controllers.UserControllers
             await _userService.Subscribe(model);
             return Ok();
         }
-        
-        [AllowAnonymous] // todo remove
 
+        [AllowAnonymous] // todo remove
         [HttpGet("getAll")]
         public async Task<IActionResult> GetAll()
         {
             var users = await _userService.GetAll();
             return Ok(users);
         }
-        
+
         [AllowAnonymous] // todo remove
         [HttpGet("getById/{id:guid}")]
         public async Task<IActionResult> GetById(Guid id)
@@ -69,7 +68,7 @@ namespace Server.Controllers.UserControllers
             var user = await _userService.GetUserById(id);
             return Ok(user);
         }
-        
+
         [AllowAnonymous] // todo remove
         [HttpGet("GetUserSubscribers/{userId:guid}")]
         public async Task<IActionResult> GetUserSubscribers(Guid userId)
@@ -77,7 +76,7 @@ namespace Server.Controllers.UserControllers
             var user = await _userService.GetUserSubscribers(userId);
             return Ok(user);
         }
-        
+
         [AllowAnonymous] // todo remove
         [HttpGet("GetUserSubscribed/{userId:guid}")]
         public async Task<IActionResult> GetUserSubscribed(Guid userId)
@@ -85,7 +84,7 @@ namespace Server.Controllers.UserControllers
             var user = await _userService.GetUserSubscribed(userId);
             return Ok(user);
         }
-        
+
         [AllowAnonymous]
         [HttpGet("getAuthorById/{id:guid}")]
         public async Task<IActionResult> GetAuthorById(Guid id)
@@ -93,8 +92,8 @@ namespace Server.Controllers.UserControllers
             var user = await _userService.GetAuthorById(id);
             return Ok(user);
         }
-        
-        
+
+
         [AllowAnonymous] // todo remove
         // how to update
         [HttpPut("update/{id:guid}")]
@@ -103,14 +102,21 @@ namespace Server.Controllers.UserControllers
             var user = await _userService.Update(id, model);
             return Ok(user);
         }
-        
+
         [AllowAnonymous] // todo remove
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {
             await _userService.Delete(id);
-            return Ok(new { message = "User deleted successfully" });
+            return Ok(new {message = "User deleted successfully"});
         }
-        
+
+        [AllowAnonymous] // todo remove
+        [HttpGet("isUserSubscribed")]
+        public async Task<IActionResult> IsUserSubscribed([FromQuery(Name = "userId")] Guid userId,
+            [FromQuery(Name = "authorId")] Guid authorId)
+        {
+            return Ok(await _userService.IsSubscribed(userId, authorId));
+        }
     }
 }

@@ -19,6 +19,10 @@ namespace Server.ViewModels.UserViewModels
         public ICollection<PostPreview> Posts { get; set; }
 
         public ICollection<PostLikeView> LikedPosts { get; set; }
+        
+        public ICollection<PostPreview> PostsLiked { get; set; }
+
+        
 
         public int QuantityOfSubscribers { get; set; }
 

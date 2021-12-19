@@ -61,6 +61,23 @@ namespace Server.Services.PostServices
             return _mapper.Map<PostView>(post);
         }
 
+        public async Task<List<PostPreview>> GetPostPreviewsById(Guid userId)
+        {
+            var response = await _context.Users
+                .Include(user => user.LikedPosts)
+                .ThenInclude(like => like.Post)
+                .ThenInclude(post=>post.PostImages)
+                .Where(user => user.Id == userId)
+                .AsSplitQuery()
+                .FirstOrDefaultAsync();
+            if (response == null)
+            {
+                throw new KeyNotFoundException("Post not found");
+            }
+            return response.LikedPosts.Select(like => _mapper.Map<PostPreview>(like.Post)).ToList();
+
+        }
+
         public async Task<List<PostPreview>> GetAllByUserId(Guid userId)
         {
             var user = await _context.Users
@@ -83,7 +100,7 @@ namespace Server.Services.PostServices
         }
 
 
-        public async Task Create(CreateUpdatePost model)
+        public async Task<PostPreview> Create(CreateUpdatePost model)
         {
             var post = _mapper.Map<Post>(model);
 
@@ -93,6 +110,7 @@ namespace Server.Services.PostServices
 
             _context.Add(post);
             await _context.SaveChangesAsync();
+            return _mapper.Map<PostPreview>(post);
         }
 
         public async Task Update(CreateUpdatePost model)

@@ -21,7 +21,7 @@ namespace Server.Models.UserModels
 
         [MaxLength(50)] public string Username { get; set; }
 
-        [MaxLength(200)] public string Biography { get; set; }
+        public string Biography { get; set; }
 
         public bool IsPrivate { get; set; }
 

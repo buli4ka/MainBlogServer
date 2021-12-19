@@ -33,6 +33,12 @@ namespace Server.Controllers.PostControllers
         {
             return Ok(await _postService.GetPostById(postId));
         }
+        [AllowAnonymous]
+        [HttpGet("getPreviewsById/{userId:guid}")]
+        public async Task<IActionResult> GetPreview(Guid userId)
+        {
+            return Ok(await _postService.GetPostPreviewsById(userId));
+        }
 
         [AllowAnonymous]
         [HttpGet("GetAllByAuthorId/{authorId:guid}")]
@@ -45,8 +51,8 @@ namespace Server.Controllers.PostControllers
         [HttpPost("CreatePost")]
         public async Task<IActionResult> CreatePost(CreateUpdatePost post)
         {
-            await _postService.Create(post);
-            return Ok("Post Created");
+            var response = await _postService.Create(post);
+            return CreatedAtAction(nameof(CreatePost), new {id=response.Id}, response);
         }
         [AllowAnonymous] // todo remove
 

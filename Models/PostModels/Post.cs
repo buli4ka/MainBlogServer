@@ -8,6 +8,12 @@ namespace Server.Models.PostModels
 {
     public class Post : BaseModel
     {
+        public Post()
+        {
+            PostComments = new List<PostComment>();
+            PostLikes = new List<PostLike>();
+            PostImages = new List<PostImage>();
+        }
         [MaxLength(50)] public string Title { get; set; }
 
         public string Text { get; set; }
