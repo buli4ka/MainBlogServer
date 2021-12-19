@@ -12,20 +12,7 @@ namespace Server.DatabaseConfig
         {
             if (!context.Users.Any())
             {
-                var userIcon1 = new UserIcon
-                {
-                    ImageType = "png",
-                    ImagePath = "Resources/UserIcons/token_3.png",
-                    ImageName = "token_3"
-                };
-                var userIcon2 = new UserIcon
-                {
-                    ImageType = "png",
-                    ImagePath = "Resources/UserIcons/token_2.png",
-                    ImageName = "token_2"
-                };
-                
-
+              
                 var user1 = new User
                 {
                     FirstName = "Alan",
@@ -56,7 +43,6 @@ namespace Server.DatabaseConfig
                     Email = "PeterParker@gmail.com",
                     IsPrivate = false,
                     HashedPassword = BCrypt.Net.BCrypt.HashPassword("p"),
-                    UserIcon = userIcon2,
                     Subscribers = new List<User> {user1, user2},
                     Subscribed = new List<User> {user1, user2},
                 };
@@ -69,7 +55,6 @@ namespace Server.DatabaseConfig
                     Email = "SteveJobs@gmail.com",
                     IsPrivate = false,
                     HashedPassword = BCrypt.Net.BCrypt.HashPassword("s"),
-                    UserIcon = userIcon1,
                     Subscribers = new List<User> {user1, user2, user3},
                     Subscribed = new List<User> {user1, user2, user3},
                 };
@@ -180,8 +165,7 @@ namespace Server.DatabaseConfig
                 };
 
                 context.AddRange(
-                    userIcon1, userIcon2
-                    , user1, user2, user3, user4
+                    user1, user2, user3, user4
                     , post1, post2, post3, post4
                     , postComment1, postComment2, postComment3, postComment4
                     , postLike1, postLike2, postLike3, postLike4, postLike5, postLike6, postLike7, postLike8);
