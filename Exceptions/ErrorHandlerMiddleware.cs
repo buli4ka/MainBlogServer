@@ -33,6 +33,10 @@ namespace Server.Exceptions
                         // custom application error
                         response.StatusCode = (int) HttpStatusCode.BadRequest;
                         break;
+                    case GoodException e:
+                        // custom application error
+                        response.StatusCode = (int) HttpStatusCode.OK;
+                        break;
                     case KeyNotFoundException e:
                         // not found error
                         response.StatusCode = (int) HttpStatusCode.NotFound;

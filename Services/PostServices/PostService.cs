@@ -158,13 +158,21 @@ namespace Server.Services.PostServices
 
             _context.Remove(post);
             await _context.SaveChangesAsync();
-
-            var postDirectory = Path.GetDirectoryName(Path.Combine(_appSettings.ProjectDirectory,
-                $"{_appSettings.PostImagesPath}/{postId}/"));
-            if (postDirectory is not null)
+            try
             {
-                Directory.Delete(postDirectory, true);
+                var postDirectory = Path.GetDirectoryName( Path.Combine(_appSettings.ProjectDirectory,
+                    $"{_appSettings.PostImagesPath}/{postId}/"));
+                if (postDirectory is not null)
+                {
+                    Directory.Delete(postDirectory, true);
+                }
             }
+            catch (Exception e)
+            {
+                throw new GoodException("Directory doesn't exists");
+            }
+          
+            
         }
 
         public async Task AddRemoveLike(AddLike requestLike)
