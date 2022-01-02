@@ -3,7 +3,7 @@ using Server.ViewModels.UserViewModels;
 
 namespace Server.Utils.UserValidation
 {
-    public class UserCheck
+    public static class UserCheck
     {
         public static bool IsUserValid(User user)
         {

@@ -9,23 +9,15 @@ namespace Server.ViewModels.UserViewModels
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
+        
+        public string Email { get; set; }
 
         public string Username { get; set; }
 
         public string IconUrl { get; set; }
+        
+        public bool isPrivate { get; set; }
 
         public string Biography { get; set; }
-
-        public ICollection<PostPreview> Posts { get; set; }
-
-        public ICollection<PostLikeView> LikedPosts { get; set; }
-        
-        public ICollection<PostPreview> PostsLiked { get; set; }
-
-        
-
-        public int QuantityOfSubscribers { get; set; }
-
-        public int QuantityOfSubscribed { get; set; }
     }
 }

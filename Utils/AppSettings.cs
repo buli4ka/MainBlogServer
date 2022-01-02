@@ -13,5 +13,9 @@ namespace Server.Utils
         public string AppUrl { get; set; }
         
         public string ProjectDirectory { get; set; }
+
+        public string DefaultConnection { get; set; }
+
+        
     }
 }

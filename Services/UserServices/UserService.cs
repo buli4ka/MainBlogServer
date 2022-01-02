@@ -140,15 +140,9 @@ namespace Server.Services.UserServices
         {
             var user = await _context.Users
                 .Where(user => user.Id == userId)
-                .Include(user => user.Subscribed)
-                .Include(user => user.Subscribers)
-                .Include(user => user.Posts)
-                .ThenInclude(post => post.PostImages)
-                .Include(user => user.LikedPosts)
-                // .ThenInclude(like => like.Post)
                 .Include(user => user.UserIcon)
                 .AsSplitQuery()
-                .FirstOrDefaultAsync();
+                .SingleOrDefaultAsync();
 
             if (user == null) throw new KeyNotFoundException("User not found");
             
