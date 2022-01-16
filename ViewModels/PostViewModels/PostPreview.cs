@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Server.Models;
 
 namespace Server.ViewModels.PostViewModels
@@ -19,6 +20,6 @@ namespace Server.ViewModels.PostViewModels
 
         public int QuantityOfComments { get; set; }
 
-        public int QuantityOfLikes { get; set; }
+        public ICollection<UserLikeView> PostLikes { get; set; }
     }
 }

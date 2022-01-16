@@ -39,7 +39,7 @@ namespace Server.Utils
                 .ForMember("ImageUrls",
                     opt => opt.MapFrom(post =>
                         post.PostImages.Select(i => AppDomain + "Image/getById/" + i.Id))); // todo change to _appSettings
-            
+
             CreateMap<Post, PostPreview>()
                 .ForMember("PreviewImage",
                     opt => opt.MapFrom(post =>
@@ -47,10 +47,10 @@ namespace Server.Utils
                         post.PostImages.FirstOrDefault().Id)) // todo change to _appSettings
                 .ForMember("QuantityOfComments",
                     opt => opt.MapFrom(post =>
-                        post.PostComments.Count))
-                .ForMember("QuantityOfLikes",
-                    opt => opt.MapFrom(post =>
-                        post.PostLikes.Count));
+                        post.PostComments.Count));
+                // .ForMember("QuantityOfLikes",
+                    // opt => opt.MapFrom(post =>
+                    //     post.PostLikes.Count));
 
             CreateMap<CreateUpdatePost, Post>()
                 .ForAllMembers(x => x.Condition(
