@@ -8,6 +8,10 @@ namespace Server.Models.PostModels
 {
     public class PostComment : BaseModel
     {
+        public PostComment()
+        {
+            PostSubComments = new List<PostComment>();
+        }
         public string Text { get; set; }
         
         public DateTime CreatedAt { get; set; }
@@ -19,6 +23,6 @@ namespace Server.Models.PostModels
         public Guid PostId { get; set; }
         public Post Post { get; set; }
 
-        // public ICollection<PostSubComment> PostSubComments { get; set; }
+        public ICollection<PostComment> PostSubComments { get; set; }
     }
 }

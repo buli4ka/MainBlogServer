@@ -33,7 +33,7 @@ namespace Server.Services.PostServices.PostCommentServices
             var comment = await _context.PostComments
                 .Where(c => c.Id == commentId)
                 .Include(c => c.User)
-                // .Include(c => c.PostSubComments)
+                .Include(c => c.PostSubComments)
                 .FirstOrDefaultAsync();
             if (comment == null)
             {
@@ -44,14 +44,28 @@ namespace Server.Services.PostServices.PostCommentServices
 
         public async Task CreateComment(CreateUpdateCommentView requestComment)
         {
+            var parentId = requestComment?.MainCommentId;
             var comment = _mapper.Map<PostComment>(requestComment);
             if (!CheckPost.IsCommentValid(comment))
             {
                 throw new AppException("Invalid comment Data");
             }
+
+            var mainComment = parentId != null ? await _context.PostComments
+                .Where(c => c.Id == parentId)
+                .Include(c => c.PostSubComments)
+                .FirstOrDefaultAsync() : null;
+            
             comment.CreatedAt = DateTime.Now;
+            mainComment?.PostSubComments.Add(comment);
+            
             _context.Add(comment);
             await _context.SaveChangesAsync();
+            if (mainComment != null)
+            {
+                _context.Update(mainComment);
+                await _context.SaveChangesAsync();
+            }
         }
 
         public async Task UpdateComment(CreateUpdateCommentView requestComment)
@@ -85,10 +99,21 @@ namespace Server.Services.PostServices.PostCommentServices
 
         public async Task DeleteComment(Guid commentId)
         {
-            var comment = await _context.PostComments.FindAsync(commentId);
+            var comment = await _context.PostComments
+                .Where(c => c.Id == commentId)
+                .FirstOrDefaultAsync();
             if (comment == null)
                 throw new KeyNotFoundException("Comment not found");
-            
+            Console.WriteLine(comment.PostSubComments.Count);
+            if (comment.PostSubComments.Count > 0)
+            {
+                foreach (var i in comment.PostSubComments)
+                {
+                    _context.Remove(i);
+                    await _context.SaveChangesAsync();
+                }
+                    
+            }
             _context.Remove(comment);
             await _context.SaveChangesAsync();
                 

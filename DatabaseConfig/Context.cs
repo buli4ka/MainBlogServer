@@ -26,6 +26,8 @@ namespace Server.DatabaseConfig
                 .HasOne(e => e.Author)
                 .WithMany(e => e.Posts)
                 .OnDelete(DeleteBehavior.ClientCascade);
+            
+          
         }
 
         public Context(DbContextOptions<Context> options)

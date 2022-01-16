@@ -25,7 +25,7 @@ namespace Server.Utils
             CreateMap<PostComment, PostCommentView>();
                 // .ForMember("PostSubComments",
                 //     opt => opt.MapFrom(comment=>
-                //         comment.PostSubComments.Select(i)));
+                //         comment.PostSubComments.Select(comment)));
             
             // CreateMap<PostSubComment, PostSubCommentView>();
             CreateMap<AddLike, PostLike>();

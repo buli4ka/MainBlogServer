@@ -21,18 +21,26 @@ namespace Server.Controllers.PostControllers
         
         [AllowAnonymous] // todo remove
 
-        [HttpPost("CreateComment")]
-        public async Task<IActionResult> CreateComment(CreateUpdateCommentView post)
+        [HttpPost("CreateUpdateComment")]
+        public async Task<IActionResult> CreateComment(CreateUpdateCommentView comment)
         {
-            await _commentService.CreateComment(post);
+            if (comment.Id != null)
+            {
+                await _commentService.UpdateComment(comment);
+            }
+            else
+            {
+                await _commentService.CreateComment(comment);
+            }
+
             return Ok("Comment Created");
         }
         [AllowAnonymous] // todo remove
 
         [HttpPut("UpdateComment")]
-        public async Task<IActionResult> UpdateComment(CreateUpdateCommentView post)
+        public async Task<IActionResult> UpdateComment(CreateUpdateCommentView comment)
         {
-            await _commentService.UpdateComment(post);
+            await _commentService.UpdateComment(comment);
             return Ok("Comment Updated");
         }
         [AllowAnonymous] // todo remove

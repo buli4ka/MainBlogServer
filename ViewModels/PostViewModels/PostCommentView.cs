@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Server.Models;
+using Server.ViewModels.UserViewModels;
 
 namespace Server.ViewModels.PostViewModels
 {
@@ -13,8 +14,10 @@ namespace Server.ViewModels.PostViewModels
         public DateTime UpdatedAt { get; set; }
 
         public Guid UserId { get; set; }
+        
+        public AuthorPreview User { get; set; }
 
-        public ICollection<PostSubCommentView> PostSubComments {get; set;}
+        public ICollection<PostCommentView> PostSubComments {get; set;}
 
     }
 
@@ -29,12 +32,18 @@ namespace Server.ViewModels.PostViewModels
         public Guid UserId { get; set; }
     }
 
-    public class CreateUpdateCommentView : BaseModel
+    public class CreateUpdateCommentView 
     {
+        public Guid? Id { get; set; }
+
         public string Text { get; set; }
 
         public Guid UserId { get; set; }
         
         public Guid PostId { get; set; }
+        
+        public Guid? MainCommentId { get; set; }
+
+
     }
 }

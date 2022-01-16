@@ -48,6 +48,7 @@ namespace Server.Services.PostServices
                 .Include(post => post.Author)
                 .ThenInclude(author => author.UserIcon)
                 .Include(post => post.PostComments)
+                .ThenInclude(postComment => postComment.User)
                 .Include(post => post.PostLikes)
                 .Include(post => post.PostImages)
                 .AsSplitQuery()
