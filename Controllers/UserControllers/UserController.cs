@@ -1,9 +1,10 @@
 using System;
 using System.Threading.Tasks;
 using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
+// using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Server.ControllerAttributes;
 using Server.Models.UserModels;
 using Server.Services.UserServices;
 using Server.Utils;
@@ -11,7 +12,7 @@ using Server.ViewModels.UserViewModels;
 
 namespace Server.Controllers.UserControllers
 {
-    [ControllerAttributes.Authorize]
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class UserController : ControllerBase
@@ -46,7 +47,6 @@ namespace Server.Controllers.UserControllers
             return Ok(user);
         }
 
-        [AllowAnonymous] // todo remove
         [HttpPost("subscribe")]
         public async Task<IActionResult> Subscribe(SubscribeRequest model)
         {
@@ -54,7 +54,6 @@ namespace Server.Controllers.UserControllers
             return Ok();
         }
 
-        [AllowAnonymous] // todo remove
         [HttpGet("getAll")]
         public async Task<IActionResult> GetAll()
         {
@@ -62,7 +61,6 @@ namespace Server.Controllers.UserControllers
             return Ok(users);
         }
 
-        [AllowAnonymous] // todo remove
         [HttpGet("getById/{id:guid}")]
         public async Task<IActionResult> GetById(Guid id)
         {
@@ -70,7 +68,6 @@ namespace Server.Controllers.UserControllers
             return Ok(user);
         }
 
-        [AllowAnonymous] // todo remove
         [HttpGet("GetUserSubscribers/{userId:guid}")]
         public async Task<IActionResult> GetUserSubscribers(Guid userId)
         {
@@ -78,7 +75,6 @@ namespace Server.Controllers.UserControllers
             return Ok(user);
         }
 
-        [AllowAnonymous] // todo remove
         [HttpGet("GetUserSubscribed/{userId:guid}")]
         public async Task<IActionResult> GetUserSubscribed(Guid userId)
         {
@@ -95,7 +91,6 @@ namespace Server.Controllers.UserControllers
         }
 
 
-        [AllowAnonymous] // todo remove
         // how to update
         [HttpPut("update/{id:guid}")]
         public async Task<IActionResult> Update(Guid id, UpdateRequest model)
@@ -104,7 +99,6 @@ namespace Server.Controllers.UserControllers
             return Ok(user);
         }
 
-        [AllowAnonymous] // todo remove
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {
@@ -112,7 +106,6 @@ namespace Server.Controllers.UserControllers
             return Ok(new {message = "User deleted successfully"});
         }
 
-        [AllowAnonymous] // todo remove
         [HttpGet("isUserSubscribed")]
         public async Task<IActionResult> IsUserSubscribed([FromQuery(Name = "userId")] Guid userId,
             [FromQuery(Name = "authorId")] Guid authorId)

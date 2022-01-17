@@ -1,16 +1,16 @@
 using System;
 using System.IO;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Server.ControllerAttributes;
 using Server.Services.ImageServices;
 using Server.Utils;
 using Server.ViewModels.ImageViewModels;
 
 namespace Server.Controllers.ImageControllers
 {
-    [ControllerAttributes.Authorize]
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class ImageController : ControllerBase
@@ -39,7 +39,6 @@ namespace Server.Controllers.ImageControllers
                 $"image/{image.ImageType}");
         }
 
-        [AllowAnonymous] // todo remove
 
         [HttpPost("AddPostImage/{postId:guid}"), DisableRequestSizeLimit]
         public async Task<IActionResult> AddPostImage([FromForm] FileView file, Guid postId)
@@ -47,7 +46,6 @@ namespace Server.Controllers.ImageControllers
             await _imageService.AddPostImage(file, postId);
             return Ok();
         }
-        [AllowAnonymous] // todo remove
 
         [HttpPut("UpdatePostImage"), DisableRequestSizeLimit]
         public async Task<IActionResult> UpdatePostImage([FromForm] FileView file,
@@ -56,7 +54,6 @@ namespace Server.Controllers.ImageControllers
             await _imageService.UpdatePostImage(file, postId, imageId);
             return Ok();
         }
-        [AllowAnonymous] // todo remove
 
         [HttpDelete("DeletePostImage/{imageId:guid}")]
         public async Task<IActionResult> DeletePostImage(Guid imageId)

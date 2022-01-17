@@ -70,8 +70,8 @@ namespace Server.Utils
                 .ForMember("IconUrl",
                     opt => opt.MapFrom(user =>
                         AppDomain + "Icon/getById/" + user.UserIcon.Id)); // todo change to _appSettings
-            
 
+            CreateMap<UserView, User>();
             CreateMap<User, AuthorView>()
                 .ForMember("IconUrl",
                     opt => opt.MapFrom(user =>

@@ -1,16 +1,16 @@
 using System;
 using System.IO;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Server.ControllerAttributes;
 using Server.Services.ImageServices;
 using Server.Utils;
 using Server.ViewModels.ImageViewModels;
 
 namespace Server.Controllers.ImageControllers
 {
-    [ControllerAttributes.Authorize]
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class IconController : ControllerBase
@@ -39,7 +39,6 @@ namespace Server.Controllers.ImageControllers
                 $"image/{image.ImageType}");
         }
 
-        [AllowAnonymous] // todo remove
         [HttpPost("AddOrUpdateUserIcon/{userId:guid}"), DisableRequestSizeLimit]
         public async Task<IActionResult> AddOrUpdateUserIcon([FromForm] FileView file, Guid userId)
         {
@@ -48,7 +47,6 @@ namespace Server.Controllers.ImageControllers
         }
 
 
-        [AllowAnonymous] // todo remove
         [HttpDelete("DeleteUserIcon/{imageId:guid}")]
         public async Task<IActionResult> DeleteUserIcon(Guid imageId)
         {
