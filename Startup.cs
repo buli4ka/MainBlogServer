@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
@@ -76,6 +77,8 @@ namespace Server
                     });
             });
             
+            //SignalR configuration
+            // services.AddSignalRCore();
             
             //Swagger Configuration
             services.AddSwaggerGen(c =>
@@ -130,6 +133,14 @@ namespace Server
             app.UseCors(MyAllowSpecificOrigins);
 
             app.UseRouting();
+            
+            // // SignalR mapping
+            // app.Map("/Hubs", map =>
+            // {
+            //     var hubConfiguration = new HubConfiguration();
+            //     map.RunSignalR(hubConfiguration);
+            //
+            // });
             
             // Error and JWT Middlewares
             app.UseMiddleware<ErrorHandlerMiddleware>();

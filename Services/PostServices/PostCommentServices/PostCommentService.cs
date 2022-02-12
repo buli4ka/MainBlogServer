@@ -57,6 +57,7 @@ namespace Server.Services.PostServices.PostCommentServices
                 .FirstOrDefaultAsync() : null;
             
             comment.CreatedAt = DateTime.Now;
+            comment.IsSubComment = parentId != null;
             mainComment?.PostSubComments.Add(comment);
             
             _context.Add(comment);

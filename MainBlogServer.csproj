@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Resources" />
+    <Folder Include="Resources\Emoji" />
   </ItemGroup>
 
   <ItemGroup>

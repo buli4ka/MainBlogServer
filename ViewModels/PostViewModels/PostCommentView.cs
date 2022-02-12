@@ -16,6 +16,9 @@ namespace Server.ViewModels.PostViewModels
         public Guid UserId { get; set; }
         
         public AuthorPreview User { get; set; }
+        
+        public bool IsSubComment { get; set; }
+
 
         public ICollection<PostCommentView> PostSubComments {get; set;}
 

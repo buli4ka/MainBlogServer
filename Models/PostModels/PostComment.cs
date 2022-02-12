@@ -11,11 +11,13 @@ namespace Server.Models.PostModels
         public PostComment()
         {
             PostSubComments = new List<PostComment>();
+            IsSubComment = false;
         }
         public string Text { get; set; }
         
         public DateTime CreatedAt { get; set; }
-
+        
+        public bool IsSubComment { get; set; }
         public DateTime UpdatedAt { get; set; }
         public Guid UserId { get; set; }
         public User User { get; set; }

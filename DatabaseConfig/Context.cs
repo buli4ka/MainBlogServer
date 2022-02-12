@@ -26,6 +26,11 @@ namespace Server.DatabaseConfig
                 .HasOne(e => e.Author)
                 .WithMany(e => e.Posts)
                 .OnDelete(DeleteBehavior.ClientCascade);
+            modelBuilder
+                .Entity<PostComment>()
+                .HasOne(e => e.Post)
+                .WithMany(e => e.PostComments)
+                .OnDelete(DeleteBehavior.ClientCascade);
             
           
         }
